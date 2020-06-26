@@ -13,8 +13,14 @@ public class Order {
         this.name = name;
         this.amount = amount;
     }
+
     public void fill(Warehouse warehouse) {
-        isFilled = warehouse.take(name, amount);
+        if(warehouse.hasInventory(name, amount)) {
+            warehouse.remove(name, amount);
+            isFilled = true;
+        } else {
+            isFilled = false;
+        }
     }
 
     public Boolean isFilled() {

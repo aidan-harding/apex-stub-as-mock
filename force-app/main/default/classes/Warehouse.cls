@@ -15,13 +15,12 @@ public class Warehouse {
         return stock.get(name);
     }
 
-    public Boolean take(String name, Integer amount) {
+    public Boolean hasInventory(String name, Integer amount) {
         Integer warehouseAmount = stock.get(name);
-        if(warehouseAmount == null || warehouseAmount < amount) {
-            return false;
-        } else {
-            stock.put(name, warehouseAmount - amount);
-            return true;
-        }
+        return warehouseAmount != null && warehouseAmount >= amount;
+    }
+
+    public void remove(String name, Integer amount) {
+        stock.put(name, stock.get(name) - amount);
     }
 }
