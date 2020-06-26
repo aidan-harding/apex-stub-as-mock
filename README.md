@@ -19,3 +19,29 @@ class, or have a big switch-style statement). This would lead to an ugly impleme
 However, if we use Stubs API to make a Mock in the sense of the article, we can set the expectations from the test and 
 avoid having to put lots of ugly code in the `StubProvider`. The test can set a sequence of expectations, and the stub 
 just verifies those, providing the responses given in the test.
+
+A test in this scenario (where we are mocking the Warehouse class) looks like this:
+
+    Mock warehouseMock = new Mock();
+    Warehouse warehouse = (Warehouse)Test.createStub(Warehouse.class, warehouseMock);
+            warehouseMock.expects(
+                    new Expectation()
+                            .method('hasInventory')
+                            .parameter('name', TALISKER)
+                            .parameter('amount', 50)
+                            .returnValue(true))
+                    .expects(
+                    new Expectation()
+                            .parameter('name', TALISKER)
+                            .parameter('amount', 50)
+                            .method('remove'));
+    
+            Order order = new Order(TALISKER, 50);
+            order.fill(warehouse);
+            System.assert(warehouseMock.verify());
+
+Note that the `Mock` class from this repo doesn't need to know anything special about Warehouse. The test sets 
+expectations in a generic way.
+
+Note also that this is really just a proof-of-concept to explore the ideas in the above article, not necessarily 
+something I advocate.  
