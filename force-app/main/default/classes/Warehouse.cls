@@ -14,4 +14,14 @@ public class Warehouse {
     public Integer getInventory(String name) {
         return stock.get(name);
     }
+
+    public Boolean take(String name, Integer amount) {
+        Integer warehouseAmount = stock.get(name);
+        if(warehouseAmount == null || warehouseAmount < amount) {
+            return false;
+        } else {
+            stock.put(name, warehouseAmount - amount);
+            return true;
+        }
+    }
 }

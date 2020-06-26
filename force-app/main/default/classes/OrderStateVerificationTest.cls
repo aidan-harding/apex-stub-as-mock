@@ -5,6 +5,7 @@
 
 @IsTest
 private class OrderStateVerificationTest {
+
     private static String TALISKER = 'Talisker';
     private static String HIGHLAND_PARK = 'Highland Park';
     private static Warehouse warehouse = new Warehouse();
@@ -15,11 +16,20 @@ private class OrderStateVerificationTest {
     }
 
     @IsTest
-    static void testBehavior() {
+    static void testOrderIsFilledIfEnoughInWarehouse() {
         setup();
         Order order = new Order(TALISKER, 50);
         order.fill(warehouse);
         System.assert(order.isFilled());
         System.assertEquals(0, warehouse.getInventory(TALISKER));
+    }
+
+    @IsTest
+    static void testOrderDoesNotRemoveIfNotEnough() {
+        setup();
+        Order order = new Order(TALISKER, 51);
+        order.fill(warehouse);
+        System.assert(!order.isFilled());
+        System.assertEquals(50, warehouse.getInventory(TALISKER));
     }
 }
