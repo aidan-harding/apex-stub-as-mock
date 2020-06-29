@@ -12,9 +12,7 @@ public with sharing class ExpectationQueue {
     }
 
     public Expectation take() {
-        Expectation returnValue = expectations.get(0);
-        expectations.remove(0);
-        return returnValue;
+        return expectations.remove(0);
     }
 
     public Boolean isEmpty() {

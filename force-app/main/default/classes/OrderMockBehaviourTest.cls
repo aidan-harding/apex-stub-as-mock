@@ -35,7 +35,7 @@ private class OrderMockBehaviourTest {
         warehouseMock.expects(
                 new Expectation()
                         .method('hasInventory')
-                        .returnValue(true));
+                        .returnValue(false));
 
         Order order = new Order(TALISKER, 51);
         order.fill(warehouse);
