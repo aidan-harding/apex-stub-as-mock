@@ -24,24 +24,41 @@ A test in this scenario (where we are mocking the Warehouse class) looks like th
 
     Mock warehouseMock = new Mock();
     Warehouse warehouse = (Warehouse)Test.createStub(Warehouse.class, warehouseMock);
-            warehouseMock.expects(
-                    new Expectation()
-                            .method('hasInventory')
-                            .parameter('name', TALISKER)
-                            .parameter('amount', 50)
-                            .returnValue(true))
-                    .expects(
-                    new Expectation()
-                            .parameter('name', TALISKER)
-                            .parameter('amount', 50)
-                            .method('remove'));
-    
-            Order order = new Order(TALISKER, 50);
-            order.fill(warehouse);
-            System.assert(warehouseMock.verify());
+
+    warehouseMock.expects(
+            new Expectation()
+                    .method('hasInventory')
+                    .parameter(String.class, 'name', TALISKER)
+                    .parameter(Integer.class, 'amount', 50)
+                    .returnValue(true))
+            .expects(
+            new Expectation()
+                    .parameter(String.class, 'name', TALISKER)
+                    .parameter(Integer.class, 'amount', 50)
+                    .method('remove'));
+
+    Order order = new Order(TALISKER, 50);
+    order.fill(warehouse);
+    System.assert(warehouseMock.verify());
 
 Note that the `Mock` class from this repo doesn't need to know anything special about Warehouse. The test sets 
 expectations in a generic way.
+
+An alternative way to set expectations is to use a recording mock. Here, you create two mocks: one to record and one to 
+play back. The playback mock is provided to the recorder at setup, so that it can set expectations correctly e.g.
+
+    Mock warehouseMock = new Mock();
+    MockRecorder warehouseMockRecorder = new MockRecorder(warehouseMock);
+    Warehouse warehouseRecorder = (Warehouse)Test.createStub(Warehouse.class, warehouseMockRecorder);
+    Warehouse warehouse = (Warehouse)Test.createStub(Warehouse.class, warehouseMock);
+
+    warehouseMockRecorder.setReturn(true, warehouseRecorder.hasInventory(TALISKER, 50));
+    warehouseRecorder.remove(TALISKER, 50);
+
+    Order order = new Order(TALISKER, 50);
+    order.fill(warehouse);
+    System.assert(warehouseMock.verify());
+
 
 Note also that this is really just a proof-of-concept to explore the ideas in the above article, not necessarily 
 something I advocate.  
