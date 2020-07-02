@@ -16,13 +16,13 @@ private class OrderMockBehaviourTest {
         warehouseMock.expects(
                 new Expectation()
                         .method('hasInventory')
-                        .parameter('name', TALISKER)
-                        .parameter('amount', 50)
+                        .parameter(String.class, 'name', TALISKER)
+                        .parameter(Integer.class, 'amount', 50)
                         .returnValue(true))
                 .expects(
                 new Expectation()
-                        .parameter('name', TALISKER)
-                        .parameter('amount', 50)
+                        .parameter(String.class, 'name', TALISKER)
+                        .parameter(Integer.class, 'amount', 50)
                         .method('remove'));
 
         Order order = new Order(TALISKER, 50);

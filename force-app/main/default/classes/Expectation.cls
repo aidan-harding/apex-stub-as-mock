@@ -14,11 +14,11 @@ public class Expectation {
         return this;
     }
 
-    public Expectation parameter(String name, Object value) {
+    public Expectation parameter(Type type, String name, Object value) {
         if(parameters == null) {
-            parameters = new List<Parameter> {new Parameter(name, value)};
+            parameters = new List<Parameter> {new Parameter(type, name, value)};
         } else {
-            parameters.add(new Parameter(name, value));
+            parameters.add(new Parameter(type, name, value));
         }
         return this;
     }
@@ -28,23 +28,25 @@ public class Expectation {
         return this;
     }
 
-    public void validateParameters(List<String> parameterNames, List<Object> parameterValues) {
+    public void validateParameters(List<Type> parameterTypes, List<String> parameterNames, List<Object> parameterValues) {
         if(parameters != null) {
             System.assertEquals(parameterNames.size(), parameterValues.size());
             System.assertEquals(parameterNames.size(), parameters.size());
 
             for (Integer i = 0; i < parameters.size(); i++) {
-                System.assertEquals(parameters[i].name, parameterNames[i]);
+                System.assertEquals(parameters[i].type, parameterTypes[i]);
                 System.assertEquals(parameters[i].value, parameterValues[i]);
             }
         }
     }
 
     private class Parameter {
+        public Type type;
         public String name;
         public Object value;
 
-        public Parameter(String name, Object value) {
+        public Parameter(Type type, String name, Object value) {
+            this.type = type;
             this.name = name;
             this.value = value;
         }

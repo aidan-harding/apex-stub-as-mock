@@ -16,7 +16,7 @@ public class Mock implements StubProvider {
     public Object handleMethodCall(Object stubbedObject, String stubbedMethod, Type returnType, List<Type> parameterTypes, List<String> parameterNames, List<Object> parameters) {
         System.assert(!expectations.isEmpty(), 'Ran out of expectations handling method ' + stubbedMethod);
         Expectation thisExpectation = expectations.take();
-        thisExpectation.validateParameters(parameterNames, parameters);
+        thisExpectation.validateParameters(parameterTypes, parameterNames, parameters);
         return thisExpectation.returnValue;
     }
 
